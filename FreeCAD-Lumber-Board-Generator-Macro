@@ -1,0 +1,153 @@
+import FreeCAD
+import FreeCADGui
+from PySide2.QtWidgets import QDialog, QVBoxLayout, QLabel, QComboBox, QLineEdit, QPushButton
+from PySide2.QtCore import Qt
+import Part
+from fractions import Fraction
+
+# Standard lumber sizes (Nominal -> Actual dimensions in inches)
+board_sizes = {
+    '2x4': (1.5, 3.5),
+    '2x6': (1.5, 5.5),
+    '2x8': (1.5, 7.25),
+    '2x10': (1.5, 9.25),
+    '2x12': (1.5, 11.25),
+    '4x4': (3.5, 3.5),
+    '4x6': (3.5, 5.5),
+    '4x8': (3.5, 7.25),
+    '6x6': (5.5, 5.5),
+    '6x8': (5.5, 7.25),
+}
+
+INCH_TO_MM = 25.4
+
+class LumberBoardDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("Lumber Board Generator")
+        self.setGeometry(100, 100, 400, 250)
+
+        self.layout = QVBoxLayout()
+
+        self.size_label = QLabel("Select Lumber Size:")
+        self.size_input = QComboBox(self)
+        self.size_input.addItems(board_sizes.keys())
+
+        self.custom_thickness_label = QLabel("Custom Thickness (inches):")
+        self.custom_thickness_input = QLineEdit(self)
+
+        self.custom_width_label = QLabel("Custom Width (inches):")
+        self.custom_width_input = QLineEdit(self)
+
+        self.custom_length_label = QLabel("Custom Length (inches or ft/in):")
+        self.custom_length_input = QLineEdit(self)
+
+        self.quantity_label = QLabel("Quantity:")
+        self.quantity_input = QLineEdit(self)
+
+        self.create_button = QPushButton("Add Lumber Board", self)
+        self.create_button.clicked.connect(self.create_lumber_board)
+
+        self.finish_button = QPushButton("Finish", self)
+        self.finish_button.clicked.connect(self.accept)
+
+        self.layout.addWidget(self.size_label)
+        self.layout.addWidget(self.size_input)
+        self.layout.addWidget(self.custom_thickness_label)
+        self.layout.addWidget(self.custom_thickness_input)
+        self.layout.addWidget(self.custom_width_label)
+        self.layout.addWidget(self.custom_width_input)
+        self.layout.addWidget(self.custom_length_label)
+        self.layout.addWidget(self.custom_length_input)
+        self.layout.addWidget(self.quantity_label)
+        self.layout.addWidget(self.quantity_input)
+        self.layout.addWidget(self.create_button)
+        self.layout.addWidget(self.finish_button)
+
+        self.setLayout(self.layout)
+
+    def parse_dimension(self, dimension_str):
+        total_inches = 0
+        dimension_str = dimension_str.strip()
+
+        try:
+            if "'" in dimension_str and '"' in dimension_str:
+                feet, inches = dimension_str.split("'")
+                inches = inches.replace('"', '').strip()
+                total_inches = float(feet) * 12 + self.convert_fraction_to_float(inches)
+            elif "'" in dimension_str:
+                feet = dimension_str.replace("'", "").strip()
+                total_inches = float(feet) * 12
+            elif '"' in dimension_str:
+                inches = dimension_str.replace('"', '').strip()
+                total_inches = self.convert_fraction_to_float(inches)
+            else:
+                FreeCAD.Console.PrintError("Invalid format. Use feet/inches like 8', 96\", or 8' 6\".\n")
+                return 0
+        except ValueError:
+            FreeCAD.Console.PrintError("Error parsing dimension input.\n")
+            return 0
+        
+        return total_inches
+
+    def convert_fraction_to_float(self, fraction_str):
+        fraction_str = fraction_str.replace('"', '').strip()
+        try:
+            if ' ' in fraction_str:
+                whole, frac = fraction_str.split(' ')
+                return float(whole) + float(Fraction(frac))
+            elif '/' in fraction_str:
+                return float(Fraction(fraction_str))
+            else:
+                return float(fraction_str)
+        except ValueError:
+            FreeCAD.Console.PrintError(f"Invalid number or fraction: {fraction_str}\n")
+            return 0
+
+    def create_lumber_board(self):
+        selected_size = self.size_input.currentText()
+        custom_thickness = self.custom_thickness_input.text().strip()
+        custom_width = self.custom_width_input.text().strip()
+        custom_length = self.custom_length_input.text().strip()
+
+        thickness = self.convert_fraction_to_float(custom_thickness) if custom_thickness else board_sizes[selected_size][0]
+        width = self.convert_fraction_to_float(custom_width) if custom_width else board_sizes[selected_size][1]
+        length = self.parse_dimension(custom_length) if custom_length else 96
+
+        if thickness <= 0 or width <= 0 or length <= 0:
+            FreeCAD.Console.PrintError("All dimensions must be greater than zero.\n")
+            return
+
+        thickness *= INCH_TO_MM
+        width *= INCH_TO_MM
+        length *= INCH_TO_MM
+
+        try:
+            quantity = int(self.quantity_input.text().strip()) if self.quantity_input.text() else 1
+        except ValueError:
+            FreeCAD.Console.PrintError("Invalid quantity input.\n")
+            return
+
+        if quantity <= 0:
+            FreeCAD.Console.PrintError("Quantity must be greater than 0.\n")
+            return
+
+        doc = FreeCAD.ActiveDocument
+        if doc is None:
+            doc = FreeCAD.newDocument("LumberBoards")
+
+        for i in range(quantity):
+            board = Part.makeBox(width, length, thickness)
+            board.translate(FreeCAD.Vector(0, 0, i * (thickness + 0.1)))
+            board_obj = doc.addObject("Part::Feature", f"Lumber_{selected_size}_{i + 1}")
+            board_obj.Shape = board
+
+        doc.recompute()
+        FreeCAD.Console.PrintMessage(f"{quantity} board(s) of size {selected_size} created.\n")
+
+def show_lumber_dialog():
+    dialog = LumberBoardDialog()
+    dialog.exec_()
+
+show_lumber_dialog()
